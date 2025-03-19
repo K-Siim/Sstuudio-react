@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar'
+import Footer from './components/Footer';
 import Esileht from './pages/esileht';
 // import Ettevõttest from './pages/ettevõttest'
 // import Epood from './pages/epood';
@@ -21,9 +22,9 @@ function App() {
         <Route path="/epood" element={<Epood />}/>
         <Route path="/nukud" element={<Nukud />}/>
         <Route path="/töötoad"  element={<Töötoad/>}  />
-        <Route path="/töötoad"  element={<Kontakt/>}  /> */}
+        <Route path="/kontakt"  element={<Kontakt/>}  /> */}
       </Routes>
-      
+      <Footer />
     </div>
     </>
   )

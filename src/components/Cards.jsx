@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom"; 
 import Photo1 from "../assets/Images/1000005904.jpg";
 import Photo2 from "../assets/Images/20250123_194346.jpg";
 import Photo3 from "../assets/Images/beebitekk.jpg";
@@ -53,7 +53,7 @@ const Cards = () => {
                       
                       <Link to="/epood">
                         <button className="border border-white px-4 py-2 rounded-lg hover:bg-black/20 duration-300">
-                          View
+                          Vaata
                         </button>
                       </Link>
                     </div>
