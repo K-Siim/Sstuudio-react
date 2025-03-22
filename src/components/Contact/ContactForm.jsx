@@ -1,7 +1,8 @@
 import React from 'react';
 import ProductImage from "../../assets/Images/photo-collage.png";
 
-const CompanyPicture = () => {
+
+const ContactForm = () => {
   return (
     <div
       className="relative w-full min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-6 md:px-10"
@@ -14,10 +15,12 @@ const CompanyPicture = () => {
 
       
       <div className="relative z-10 text-white text-6xl sm:text-7xl md:text-6xl lg:text-7xl font-bold text-center">
-        Ettevõttest
+        Kontakt
       </div>
     </div>
+    
+    
   );
 };
 
-export default CompanyPicture;
+export default ContactForm;

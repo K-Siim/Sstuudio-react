@@ -7,7 +7,7 @@ import Ettevõttest from './pages/ettevõttest'
 // import Epood from './pages/epood';
 // import Nukud from './pages/Nukud';
 import Töötoad from './pages/töötoad'
-// import Kontakt from './pages/Kontakt';
+import Kontakt from './pages/kontakt';
 
 
 
@@ -22,7 +22,7 @@ function App() {
         {/* <Route path="/epood" element={<Epood />}/>
         <Route path="/nukud" element={<Nukud />}/> */}
         <Route path="/töötoad"  element={<Töötoad/>}  />
-        {/* <Route path="/kontakt"  element={<Kontakt/>}  /> */}
+        <Route path="/kontakt"  element={<Kontakt/>}  />
       </Routes>
       <Footer />
     </div>
