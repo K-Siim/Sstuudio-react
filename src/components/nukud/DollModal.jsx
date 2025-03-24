@@ -1,0 +1,82 @@
+import React, { useState } from 'react';
+
+const DollModal = ({ doll, isOpen, onClose }) => {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    if (!isOpen || !doll) return null;
+
+    return (
+        <div 
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+            onClick={onClose}
+        >
+            <div 
+                className="relative bg-white rounded-xl max-w-4xl w-full mx-auto overflow-hidden"
+                onClick={e => e.stopPropagation()}
+            >
+                <button 
+                    onClick={onClose}
+                    className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 hover:bg-white"
+                >
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="relative">
+                        <div className="aspect-square">
+                            {doll.images && doll.images.length > 0 ? (
+                                <img 
+                                    src={doll.images[currentImageIndex].url}
+                                    alt={doll.images[currentImageIndex].alt}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                                    <span className="text-gray-400">No image available</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {doll.images && doll.images.length > 1 && (
+                            <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 px-4">
+                                {doll.images.map((image, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentImageIndex(index)}
+                                        className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all
+                                            ${currentImageIndex === index 
+                                                ? 'border-black opacity-100' 
+                                                : 'border-white opacity-75 hover:opacity-100'}`}
+                                    >
+                                        <img 
+                                            src={image.url} 
+                                            alt={image.alt}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="p-6 flex flex-col">
+                        <div className="mb-4">
+                            <h2 className="text-2xl font-bold mb-2">{doll.title}</h2>
+                            <p className="text-gray-600 text-sm">
+                                {new Date(doll.date).toLocaleDateString()}
+                            </p>
+                        </div>
+
+                        <div className="mb-6">
+                            <p className="text-gray-700">{doll.description}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default DollModal; 

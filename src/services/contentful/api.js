@@ -83,5 +83,48 @@ export const getCategories = async () => {
     }
 };
 
+export const getDolls = async () => {
+    try {
+        const response = await API.get(`/spaces/${import.meta.env.VITE_CONTENTFUL_SPACE_ID}/environments/master/entries`, {
+            params: {
+                content_type: 'dolls'
+            }
+        });
+
+        
+        const getDescriptionText = (richText) => {
+            if (!richText || !richText.content) return '';
+            
+            return richText.content
+                .filter(item => item.nodeType === 'paragraph')
+                .map(paragraph => 
+                    paragraph.content
+                        .filter(content => content.nodeType === 'text')
+                        .map(text => text.value)
+                        .join(' ')
+                )
+                .join(' ');
+        };
+
+        return response.data.items.map(item => ({
+            id: item.sys?.id,
+            title: item.fields.title,
+            date: item.fields.date,
+            description: getDescriptionText(item.fields.description),
+            images: Array.isArray(item.fields.images) 
+                ? item.fields.images.map(image => ({
+                    url: `https:${response.data.includes.Asset.find(
+                        asset => asset.sys?.id === image.sys?.id
+                    )?.fields.file.url}`,
+                    alt: item.fields.title
+                }))
+                : [],
+        }));
+    } catch (error) {
+        console.log('Error fetching dolls: ', error);
+        throw error;
+    }
+};
+
 export default API;
 
