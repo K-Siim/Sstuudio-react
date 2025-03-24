@@ -4,7 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer';
 import Esileht from './pages/esileht';
 import Ettevõttest from './pages/ettevõttest'
-// import Epood from './pages/epood';
+import Epood from './pages/epood';
 // import Nukud from './pages/Nukud';
 import Töötoad from './pages/töötoad'
 import Kontakt from './pages/kontakt';
@@ -19,8 +19,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Esileht />} />
         <Route path="/ettevõttest" element={<Ettevõttest />} />
-        {/* <Route path="/epood" element={<Epood />}/>
-        <Route path="/nukud" element={<Nukud />}/> */}
+        <Route path="/epood" element={<Epood />}/>
+        {/* <Route path="/nukud" element={<Nukud />}/> */}
         <Route path="/töötoad"  element={<Töötoad/>}  />
         <Route path="/kontakt"  element={<Kontakt/>}  />
       </Routes>
