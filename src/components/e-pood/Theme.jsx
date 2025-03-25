@@ -53,7 +53,7 @@ const Theme = () => {
                         </p>
 
                         <p className="text-gray-700 mt-2 text-lg max-w-3xl mx-auto text-center px-4">
-                          NB:"Tellimus alates 100€-st on  Tasuta "
+                          NB:"Tellimus alates 100€-st on  Tasuta"
                         </p>
                     </div>
                 </div>
