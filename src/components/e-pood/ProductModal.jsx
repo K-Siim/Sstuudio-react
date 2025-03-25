@@ -80,9 +80,15 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                 <span className="text-2xl font-bold">
                   {product.price.toFixed(2)}€
                 </span>
-                <span className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600">
-                  {product.category.title}
-                </span>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Add to cart logic will go here
+                  }}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Lisa korvi
+                </button>
               </div>
             </div>
           </div>
