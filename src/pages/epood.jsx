@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Theme from '../components/e-pood/Theme';
-import { getCategories, getProducts} from '../services/contentful/api.js';
+import { getCategories, getProducts } from '../services/contentful/api.js';
 import CategoryBar from '../components/e-pood/CategoryBar';
 import ProductGrid from '../components/e-pood/ProductGrid';
 
@@ -65,4 +65,4 @@ const Epood = () => {
   );
 }
   
-  export default Epood;
+export default Epood;

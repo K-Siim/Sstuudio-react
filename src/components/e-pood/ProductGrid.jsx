@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ProductModal from './ProductModal';
 
+
 // src/components/shop/ProductGrid.jsx
 const ProductCard = ({ product, onClick }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -18,7 +19,7 @@ const ProductCard = ({ product, onClick }) => {
         prev === 0 ? product.images.length - 1 : prev - 1
       );
     };
-  
+    
     // Handle case where product has no images
     if (!product.images || product.images.length === 0) {
       return (
@@ -129,6 +130,14 @@ const ProductInfo = ({ product }) => (
       </div>
     </div>
 );
+
+const testProduct = {
+    id: 1,
+    title: 'Test Product',
+    price: 10.00,
+    productCode: 'TEST123',
+    images: [{ url: 'https://via.placeholder.com/150' }]
+};
 
 const ProductGrid = ({ products }) => {
     const [selectedProduct, setSelectedProduct] = useState(null);

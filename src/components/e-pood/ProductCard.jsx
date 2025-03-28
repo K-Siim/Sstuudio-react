@@ -1,13 +1,11 @@
 import React from 'react';
 import { useCart } from '../../context/CartContext';
-import { useState } from 'react';
 
 const ProductCard = ({ product, onClick }) => {
     const { dispatch } = useCart();
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    const handleAddToCart = (e) => {
-        e.stopPropagation();
+    const handleAddToCart = () => {
+        console.log('Adding to cart:', product); // Debugging line
         dispatch({
             type: 'ADD_TO_CART',
             payload: {

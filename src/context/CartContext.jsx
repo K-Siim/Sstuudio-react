@@ -19,14 +19,17 @@ const initialState = {
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_CART':
+            console.log('Current cart state before adding:', state);
             return {
                 ...state,
-                items: [...state.items, action.payload]
+                items: [...state.items, action.payload],
+                itemCount: state.itemCount + 1,
             };
         case 'REMOVE_FROM_CART':
             return {
                 ...state,
-                items: state.items.filter(item => item.id !== action.payload)
+                items: state.items.filter(item => item.id !== action.payload),
+                itemCount: state.itemCount - 1,
             };
         case 'UPDATE_FORM_DATA':
             return {
@@ -69,6 +72,7 @@ export const CartProvider = ({ children }) => {
 // Custom hook to use cart context
 export const useCart = () => {
     const context = useContext(CartContext);
+    console.log('Cart context:', context); // Debugging line
     if (!context) {
         throw new Error('useCart must be used within a CartProvider');
     }
