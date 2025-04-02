@@ -16,7 +16,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Handle order submission
+        
         console.log('Order details:', { items: state.items, customerInfo: formData });
     };
 
@@ -45,12 +45,12 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 />
             )}
 
-            {/* Cart Drawer */}
+           
             <div className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
                 isOpen ? 'translate-x-0' : 'translate-x-full'
             }`}>
                 <div className="p-4 h-full flex flex-col">
-                    {/* Header */}
+                    
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Ostukorv</h2>
                         <button 

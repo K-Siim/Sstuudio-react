@@ -4,8 +4,9 @@ import { useCart } from '../../context/CartContext';
 const ProductCard = ({ product, onClick }) => {
     const { dispatch } = useCart();
 
-    const handleAddToCart = () => {
-        console.log('Adding to cart:', product); // Debugging line
+    const handleAddToCart = (e) => {
+        e.stopPropagation();
+        console.log('Adding to cart:', product);
         dispatch({
             type: 'ADD_TO_CART',
             payload: {
