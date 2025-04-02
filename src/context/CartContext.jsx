@@ -19,7 +19,6 @@ const initialState = {
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_CART':
-            console.log('Current cart state before adding:', state);
             return {
                 ...state,
                 items: [...state.items, action.payload],
@@ -43,23 +42,29 @@ const cartReducer = (state, action) => {
 
 // Provider component
 export const CartProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(cartReducer, initialState);
 
-    // Load cart from localStorage when app starts
-    useEffect(() => {
-        const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-            const parsedCart = JSON.parse(savedCart);
-            dispatch({ 
-                type: 'LOAD_CART', 
-                payload: parsedCart 
-            });
+    const getInitialState = () => {
+        try {
+            const savedItems = localStorage.getItem('cartItems');
+            if (savedItems) {
+                const items = JSON.parse(savedItems);
+                return {
+                    ...initialState,
+                    items: items,
+                    itemCount: items.length
+                };
+            }
+        } catch (error) {
+            console.error("Error loading cart:", error);
         }
-    }, []);
+        return initialState;
+    };
 
-    // Save cart to localStorage whenever it changes
+    const [state, dispatch] = useReducer(cartReducer, getInitialState());
+
+    
     useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(state.items));
+        localStorage.setItem('cartItems', JSON.stringify(state.items));
     }, [state.items]);
 
     return (
@@ -69,12 +74,11 @@ export const CartProvider = ({ children }) => {
     );
 };
 
-// Custom hook to use cart context
+
 export const useCart = () => {
     const context = useContext(CartContext);
-    console.log('Cart context:', context); // Debugging line
     if (!context) {
         throw new Error('useCart must be used within a CartProvider');
     }
     return context;
-}; 
+};

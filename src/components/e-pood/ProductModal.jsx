@@ -1,28 +1,40 @@
-// src/components/shop/ProductModal.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext'; //imporditud
-
 
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { dispatch } = useCart(); //importditud
+  const { dispatch } = useCart(); //imporditud
+
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    savedCart.forEach(item => {
+      dispatch({ type: 'ADD_TO_CART', payload: item });
+    });
+  }, [dispatch]);
 
   if (!isOpen || !product) return null;
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     console.log('Adding to cart:', product);
-    dispatch({
-        type: 'ADD_TO_CART',
-        payload: {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            productCode: product.productCode,
-            image: product.images[0]
-        }
-    }); //imporditud
-};
+    
+    const newItem = {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      productCode: product.productCode,
+      image: product.images[0],
+    };
+    
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const itemExists = existingCart.some(item => item.id === newItem.id);
+    
+    if (!itemExists) {
+      const updatedCart = [...existingCart, newItem];
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      dispatch({ type: 'ADD_TO_CART', payload: newItem }); //imporditud
+    }
+  };
 
   return (
     <div 
@@ -99,11 +111,6 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                   {product.price.toFixed(2)}€
                 </span>
                 <button 
-                
-                  // onClick={(e) => {
-                  //   e.stopPropagation();
-                  //   // Add to cart logic will go here
-                  // }}
                   onClick={handleAddToCart}
                   className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                 >
