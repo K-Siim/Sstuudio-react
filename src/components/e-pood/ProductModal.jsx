@@ -1,10 +1,28 @@
 // src/components/shop/ProductModal.jsx
 import React, { useState } from 'react';
+import { useCart } from '../../context/CartContext'; //imporditud
+
 
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { dispatch } = useCart(); //importditud
 
   if (!isOpen || !product) return null;
+
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    console.log('Adding to cart:', product);
+    dispatch({
+        type: 'ADD_TO_CART',
+        payload: {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            productCode: product.productCode,
+            image: product.images[0]
+        }
+    }); //imporditud
+};
 
   return (
     <div 
@@ -81,10 +99,12 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                   {product.price.toFixed(2)}€
                 </span>
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Add to cart logic will go here
-                  }}
+                
+                  // onClick={(e) => {
+                  //   e.stopPropagation();
+                  //   // Add to cart logic will go here
+                  // }}
+                  onClick={handleAddToCart}
                   className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Lisa korvi
