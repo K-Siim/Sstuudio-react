@@ -24,8 +24,6 @@ const cartReducer = (state, action) => {
                 return state; // Kui toode on juba ostukorvis, siis ära lisa uuesti
             }
             const updatedItems = [...state.items, action.payload];
-            sessionStorage.setItem('cartItems', JSON.stringify(updatedItems)); // Salvestame sessionStorage
-
             return {
                 ...state,
                 items: updatedItems,
@@ -38,17 +36,17 @@ const cartReducer = (state, action) => {
             console.log("Toode eemaldatud:", action.payload);
             console.log("Uuendatud ostukorv:", updatedItems);
 
-            // Kui ostukorv on tühi, eemaldame sessionStorage'i
-            if (updatedItems.length === 0) {
-                sessionStorage.removeItem('cartItems');
-            } else {
-                sessionStorage.setItem('cartItems', JSON.stringify(updatedItems)); // Salvestame sessionStorage
-            }
-
             return {
                 ...state,
                 items: updatedItems,
                 itemCount: updatedItems.length,
+            };
+        }
+        case 'CLEAR_CART': {
+            return {
+                ...state,
+                items: [],
+                itemCount: 0,
             };
         }
         case 'UPDATE_FORM_DATA': {
@@ -69,14 +67,11 @@ export const CartProvider = ({ children }) => {
             const savedItems = sessionStorage.getItem('cartItems');
             if (savedItems) {
                 const parsedItems = JSON.parse(savedItems);
-                if (parsedItems.length > 0) {
-                    console.log("Ostukorv laetud lehele naastes:", parsedItems);
-                    return {
-                        ...initialState,
-                        items: parsedItems,
-                        itemCount: parsedItems.length
-                    };
-                }
+                return {
+                    ...initialState,
+                    items: parsedItems,
+                    itemCount: parsedItems.length
+                };
             }
         } catch (error) {
             console.error("Error loading cart:", error);
@@ -87,14 +82,14 @@ export const CartProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(cartReducer, getInitialState());
 
-    // Kontrollime, kas ostukorvi salvestamine toimub ainult siis, kui tooted muutuvad
+    // Centralized storage management
     useEffect(() => {
-        // Kui ostukorv on tühi, ei salvestata midagi
-        if (state.items.length > 0) {
-            console.log("Salvestan ostukorvi sessionStorage'i:", state.items);
+        if (state.items.length === 0) {
+            sessionStorage.removeItem('cartItems');
+        } else {
             sessionStorage.setItem('cartItems', JSON.stringify(state.items));
         }
-    }, [state.items]); // Lisa sõltuvus `state.items`, et salvestada ainult siis, kui tooted muutuvad
+    }, [state.items]);
 
     return (
         <CartContext.Provider value={{ state, dispatch }}>

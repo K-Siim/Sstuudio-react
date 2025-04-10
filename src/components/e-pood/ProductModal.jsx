@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useCart } from '../../context/CartContext'; //imporditud
+import React, { useState } from 'react';
+import { useCart } from '../../context/CartContext';
 
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const { dispatch } = useCart(); //imporditud
-
-  useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    savedCart.forEach(item => {
-      dispatch({ type: 'ADD_TO_CART', payload: item });
-    });
-  }, [dispatch]);
+  const { dispatch } = useCart();
 
   if (!isOpen || !product) return null;
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    console.log('Adding to cart:', product);
     
     const newItem = {
       id: product.id,
@@ -26,14 +18,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
       image: product.images[0],
     };
     
-    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-    const itemExists = existingCart.some(item => item.id === newItem.id);
-    
-    if (!itemExists) {
-      const updatedCart = [...existingCart, newItem];
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      dispatch({ type: 'ADD_TO_CART', payload: newItem }); //imporditud
-    }
+    dispatch({ type: 'ADD_TO_CART', payload: newItem });
   };
 
   return (
