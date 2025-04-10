@@ -12,7 +12,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState(null);
-    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleRemoveItem = (productId) => {
         dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
@@ -35,73 +34,20 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
         `).join('\n\n');
     };
 
-    const handleNetlifySubmit = (e) => {
-        e.preventDefault();
-        
-        if (formSubmitted) {
-            return;
-        }
-        
+    const handleSubmit = (e) => {
+        // Let the native HTML form submission handle everything
+        // Just show the user that we're processing
         setIsSubmitting(true);
-        setSubmitError(null);
-        
-        try {
-            // Set the hidden field values before submission
-            const cartItemsInput = document.getElementById('cart-items-input');
-            const cartItemsFormattedInput = document.getElementById('cart-items-formatted-input');
-            
-            if (cartItemsInput) {
-                cartItemsInput.value = JSON.stringify(state.items);
-            }
-            
-            if (cartItemsFormattedInput) {
-                cartItemsFormattedInput.value = formatCartForEmail();
-            }
-            
-            // Instead of fetch API, rely on the standard form submission
-            // Mark as submitted to prevent double-submission
-            setFormSubmitted(true);
-            
-            // Show success message
-            setSubmitSuccess(true);
-            
-            // Clear cart
-            dispatch({ type: 'CLEAR_CART' });
-            
-            // Reset form
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                message: ''
-            });
-            
-            // Auto close after delay
-            setTimeout(() => {
-                setSubmitSuccess(false);
-                onClose();
-            }, 3000);
-            
-            // Let the form submit naturally
-            return true;
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            setSubmitError('Viga tellimuse esitamisel. Palun proovige uuesti.');
-            setIsSubmitting(false);
-            return false;
-        }
     };
 
     return (
         <>
-            {/* Modify the backdrop to be more transparent or remove it */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 z-40"
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
                     onClick={onClose}
                 />
             )}
-
            
             <div className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
                 isOpen ? 'translate-x-0' : 'translate-x-full'
@@ -175,10 +121,10 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
                         <form 
                             name="order-form"
                             method="POST" 
+                            netlify="true"
                             data-netlify="true"
-                            onSubmit={handleNetlifySubmit}
+                            onSubmit={handleSubmit}
                             className="space-y-4"
-                            action="/thank-you"
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
@@ -187,13 +133,11 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
                             <input 
                                 type="hidden" 
                                 name="cart-items" 
-                                id="cart-items-input"
                                 value={JSON.stringify(state.items)} 
                             />
                             <input 
                                 type="hidden" 
                                 name="cart-items-formatted" 
-                                id="cart-items-formatted-input"
                                 value={formatCartForEmail()} 
                             />
                             
@@ -259,7 +203,7 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
                                         ? 'bg-gray-400 cursor-not-allowed' 
                                         : 'bg-[#478f6c] hover:bg-[#3a7459]'
                                 }`}
-                                disabled={isSubmitting || formSubmitted}
+                                disabled={isSubmitting}
                             >
                                 {isSubmitting ? 'Saadame...' : 'Esita tellimus'}
                             </button>
