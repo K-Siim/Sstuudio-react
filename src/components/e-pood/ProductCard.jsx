@@ -4,13 +4,22 @@ import { useCart } from '../../context/CartContext';
 
 const ProductCard = ({ product }) => {
     const [addedToCart, setAddedToCart] = useState(false);
-    const { dispatch } = useCart();
+    const [alreadyInCart, setAlreadyInCart] = useState(false);
+    const { state, dispatch } = useCart();
 
     const handleAddToCart = (e) => {
         e.stopPropagation();
         try {
             if (!product?.id || !product?.title || !product?.price) {
                 console.error('Invalid product data');
+                return;
+            }
+
+            // Check if product is already in cart
+            const isInCart = state.items.some(item => item.id === product.id);
+            if (isInCart) {
+                setAlreadyInCart(true);
+                setTimeout(() => setAlreadyInCart(false), 2000);
                 return;
             }
 
@@ -37,6 +46,18 @@ const ProductCard = ({ product }) => {
         return null;
     }
 
+    const getButtonClass = () => {
+        if (addedToCart) return 'bg-green-600 hover:bg-green-700';
+        if (alreadyInCart) return 'bg-yellow-500 hover:bg-yellow-600';
+        return 'bg-[#478f6c] hover:bg-[#3a7459]';
+    };
+
+    const getButtonText = () => {
+        if (addedToCart) return 'Lisatud';
+        if (alreadyInCart) return 'Juba korvis';
+        return 'Lisa korvi';
+    };
+
     return (
         <div className="p-4">
             <h3 className="font-medium text-lg mb-2">{product.title}</h3>
@@ -49,11 +70,11 @@ const ProductCard = ({ product }) => {
                 </span>
                 <button 
                     onClick={handleAddToCart}
-                    className={`${addedToCart ? 'bg-green-600' : 'bg-[#478f6c]'} text-white px-4 py-2 rounded-lg transition-colors ${addedToCart ? 'hover:bg-green-700' : 'hover:bg-[#3a7459]'}`}
+                    className={`${getButtonClass()} text-white px-4 py-2 rounded-lg transition-colors`}
                     aria-label={`Add ${product.title} to cart`}
-                    disabled={addedToCart}
+                    disabled={addedToCart || alreadyInCart}
                 >
-                    {addedToCart ? 'Lisatud' : 'Lisa korvi'}
+                    {getButtonText()}
                 </button>
             </div>
         </div>

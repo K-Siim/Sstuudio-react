@@ -4,7 +4,8 @@ import { useCart } from '../../context/CartContext';
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
-  const { dispatch } = useCart();
+  const [alreadyInCart, setAlreadyInCart] = useState(false);
+  const { state, dispatch } = useCart();
 
   if (!isOpen || !product) return null;
 
@@ -14,6 +15,14 @@ const ProductModal = ({ product, isOpen, onClose }) => {
     try {
       if (!product?.id || !product?.title || !product?.price) {
         console.error('Invalid product data');
+        return;
+      }
+      
+      // Check if product is already in cart
+      const isInCart = state.items.some(item => item.id === product.id);
+      if (isInCart) {
+        setAlreadyInCart(true);
+        setTimeout(() => setAlreadyInCart(false), 2000);
         return;
       }
       
@@ -33,6 +42,18 @@ const ProductModal = ({ product, isOpen, onClose }) => {
     } catch (error) {
       console.error('Error adding to cart:', error);
     }
+  };
+
+  const getButtonClass = () => {
+    if (addedToCart) return 'bg-green-600 hover:bg-green-700';
+    if (alreadyInCart) return 'bg-yellow-500 hover:bg-yellow-600';
+    return 'bg-blue-600 hover:bg-blue-700';
+  };
+
+  const getButtonText = () => {
+    if (addedToCart) return 'Lisatud korvi';
+    if (alreadyInCart) return 'Juba korvis';
+    return 'Lisa korvi';
   };
 
   return (
@@ -111,10 +132,10 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                 </span>
                 <button 
                   onClick={handleAddToCart}
-                  className={`${addedToCart ? 'bg-green-600' : 'bg-blue-600'} text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors`}
-                  disabled={addedToCart}
+                  className={`${getButtonClass()} text-white px-6 py-3 rounded-lg transition-colors`}
+                  disabled={addedToCart || alreadyInCart}
                 >
-                  {addedToCart ? 'Lisatud korvi' : 'Lisa korvi'}
+                  {getButtonText()}
                 </button>
               </div>
             </div>

@@ -20,21 +20,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
         console.log('Order details:', { items: state.items, customerInfo: formData });
     };
 
-    const handleAddToCart = (e) => {
-        e.stopPropagation();
-        console.log('Adding to cart:', product);
-        dispatch({
-            type: 'ADD_TO_CART',
-            payload: {
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                productCode: product.productCode,
-                image: product.images[0]
-            }
-        });
-    };
-
     // Helper function to safely get image URL
     const getImageUrl = (image) => {
         if (!image) return '';
@@ -47,7 +32,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
             {/* Modify the backdrop to be more transparent or remove it */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                    className="fixed inset-0 z-40"
                     onClick={onClose}
                 />
             )}
