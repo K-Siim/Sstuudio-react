@@ -1,0 +1,18 @@
+<!-- This file helps Netlify detect your form during build time -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form Configuration</title>
+</head>
+<body>
+    <!-- Hidden form used for Netlify Forms detection -->
+    <form name="order-form" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="name" />
+        <input type="email" name="email" />
+        <input type="tel" name="phone" />
+        <textarea name="message"></textarea>
+        <input type="hidden" name="cart-items" />
+        <input type="hidden" name="cart-items-formatted" />
+    </form>
+</body>
+</html>

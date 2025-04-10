@@ -34,11 +34,59 @@ const CartDrawer = ({ isOpen, onClose }) => {
         `).join('\n\n');
     };
 
-    // Simplified submit handler - just to update UI state
-    const handleSubmit = () => {
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         setIsSubmitting(true);
-        // Let Netlify handle the actual form submission
-        // The form will redirect to thank-you page after submission
+        
+        try {
+            // Prepare form data
+            const form = e.target;
+            const formEntries = new FormData(form);
+            
+            // Add form-name field for Netlify
+            formEntries.append("form-name", "order-form");
+            
+            // Add cart data
+            formEntries.append("cart-items", JSON.stringify(state.items));
+            formEntries.append("cart-items-formatted", formatCartForEmail());
+
+            // Submit to Netlify
+            const response = await fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formEntries).toString(),
+            });
+
+            if (response.ok) {
+                // Show success message
+                setSubmitSuccess(true);
+                setSubmitError(null);
+                
+                // Clear cart
+                dispatch({ type: 'CLEAR_CART' });
+                
+                // Reset form
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    message: ''
+                });
+                
+                // Optionally redirect after a short delay
+                setTimeout(() => {
+                    window.location.href = "/thank-you";
+                }, 1000); // 1 second delay to show success message
+            } else {
+                throw new Error(`Form submission failed: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error("Form submission error:", error);
+            setSubmitError("Vabandame, tellimuse esitamisel tekkis viga. Palun proovige uuesti.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -122,11 +170,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         <form 
                             name="order-form"
                             method="POST" 
-                            netlify="true"
                             data-netlify="true"
                             onSubmit={handleSubmit}
                             className="space-y-4"
-                            action="/thank-you"
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
@@ -217,4 +263,4 @@ const CartDrawer = ({ isOpen, onClose }) => {
     );
 };
 
-export default CartDrawer; 
+export default CartDrawer;
