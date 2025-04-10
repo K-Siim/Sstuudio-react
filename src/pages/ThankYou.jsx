@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const ThankYou = () => {
+  const location = useLocation();
+  const isFormSuccess = new URLSearchParams(location.search).get('form-success') === 'true';
+
   useEffect(() => {
     // Scroll to top when component mounts
     window.scrollTo(0, 0);
@@ -15,9 +18,13 @@ const ThankYou = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-3">Täname tellimuse eest!</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-3">
+          {isFormSuccess ? 'Täname tellimuse eest!' : 'Täname!'}
+        </h1>
         <p className="text-gray-600 mb-6">
-          Teie tellimus on edukalt esitatud. Võtame teiega peagi ühendust.
+          {isFormSuccess 
+            ? 'Teie tellimus on edukalt esitatud. Võtame teiega peagi ühendust.' 
+            : 'Aitäh, et külastasid meie veebilehte!'}
         </p>
         <Link 
           to="/" 
