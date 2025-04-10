@@ -9,15 +9,12 @@ const CartDrawer = ({ isOpen, onClose }) => {
         phone: '',
         message: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [submitError, setSubmitError] = useState(null);
 
     const handleRemoveItem = (productId) => {
         dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        
-        console.log('Order details:', { items: state.items, customerInfo: formData });
     };
 
     // Helper function to safely get image URL
@@ -25,6 +22,65 @@ const CartDrawer = ({ isOpen, onClose }) => {
         if (!image) return '';
         if (typeof image === 'string') return image;
         return image.url || '';
+    };
+
+    // Format cart items for email readability
+    const formatCartForEmail = () => {
+        return state.items.map(item => `
+Product: ${item.title}
+Price: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
+Code: ${item.productCode || 'N/A'}
+Image URL: ${getImageUrl(item.image) || 'No image'}
+        `).join('\n\n');
+    };
+
+    const handleNetlifySubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitError(null);
+        
+        try {
+            // Create a FormData object
+            const formDataObj = new FormData(e.target);
+            
+            // Add formatted cart data for better email display
+            formDataObj.append('cart-items-formatted', formatCartForEmail());
+            
+            // Submit the form to Netlify
+            const response = await fetch('/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(formDataObj).toString()
+            });
+            
+            if (response.ok) {
+                // Handle success
+                setSubmitSuccess(true);
+                dispatch({ type: 'CLEAR_CART' });
+                
+                // Reset form
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    message: ''
+                });
+                
+                // Auto close after delay
+                setTimeout(() => {
+                    setSubmitSuccess(false);
+                    onClose();
+                }, 3000);
+            } else {
+                // Handle error
+                setSubmitError('Viga tellimuse esitamisel. Palun proovige uuesti.');
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitError('Viga tellimuse esitamisel. Palun proovige uuesti.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -54,6 +110,20 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             </svg>
                         </button>
                     </div>
+
+                    {/* Display success message */}
+                    {submitSuccess && (
+                        <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+                            Tellimus on edukalt esitatud! Täname teid.
+                        </div>
+                    )}
+
+                    {/* Display error message */}
+                    {submitError && (
+                        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                            {submitError}
+                        </div>
+                    )}
 
                     {/* Cart Items */}
                     <div className="flex-1 overflow-y-auto mb-4">
@@ -93,13 +163,26 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
                     {/* Contact Form */}
                     {state.items.length > 0 && (
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form 
+                            name="order-form"
+                            method="POST" 
+                            data-netlify="true"
+                            onSubmit={handleNetlifySubmit}
+                            className="space-y-4"
+                        >
+                            {/* Required for Netlify Forms */}
+                            <input type="hidden" name="form-name" value="order-form" />
+                            
+                            {/* Hidden field for cart data */}
+                            <input type="hidden" name="cart-items" value={JSON.stringify(state.items)} />
+                            
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Nimi
                                 </label>
                                 <input
                                     type="text"
+                                    name="name"
                                     required
                                     value={formData.name}
                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -113,6 +196,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 </label>
                                 <input
                                     type="email"
+                                    name="email"
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -126,6 +210,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 </label>
                                 <input
                                     type="tel"
+                                    name="phone"
                                     required
                                     value={formData.phone}
                                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -138,6 +223,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                     Sõnum (pakiautomaadi valik vms)
                                 </label>
                                 <textarea
+                                    name="message"
                                     value={formData.message}
                                     onChange={(e) => setFormData({...formData, message: e.target.value})}
                                     rows="3"
@@ -147,9 +233,14 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
                             <button 
                                 type="submit"
-                                className="w-full bg-[#478f6c] text-white py-3 rounded-lg hover:bg-[#3a7459]"
+                                className={`w-full py-3 rounded-lg text-white ${
+                                    isSubmitting 
+                                        ? 'bg-gray-400 cursor-not-allowed' 
+                                        : 'bg-[#478f6c] hover:bg-[#3a7459]'
+                                }`}
+                                disabled={isSubmitting}
                             >
-                                Esita tellimus
+                                {isSubmitting ? 'Saadame...' : 'Esita tellimus'}
                             </button>
                         </form>
                     )}
