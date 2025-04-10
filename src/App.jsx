@@ -8,6 +8,7 @@ import Epood from './pages/epood';
 import Nukud from './pages/nukud';
 import Töötoad from './pages/töötoad'
 import Kontakt from './pages/kontakt';
+import ThankYou from './pages/ThankYou';
 import { CartProvider } from './context/CartContext';
 
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/nukud" element={<Nukud />}/>
           <Route path="/töötoad"  element={<Töötoad/>}  />
           <Route path="/kontakt"  element={<Kontakt/>}  />
+          <Route path="/thank-you" element={<ThankYou />} />
         </Routes>
         <Footer />
       </div>

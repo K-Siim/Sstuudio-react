@@ -12,6 +12,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState(null);
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleRemoveItem = (productId) => {
         dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
@@ -34,52 +35,60 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
         `).join('\n\n');
     };
 
-    const handleNetlifySubmit = async (e) => {
+    const handleNetlifySubmit = (e) => {
         e.preventDefault();
+        
+        if (formSubmitted) {
+            return;
+        }
+        
         setIsSubmitting(true);
         setSubmitError(null);
         
         try {
-            // Create a FormData object
-            const formDataObj = new FormData(e.target);
+            // Set the hidden field values before submission
+            const cartItemsInput = document.getElementById('cart-items-input');
+            const cartItemsFormattedInput = document.getElementById('cart-items-formatted-input');
             
-            // Add formatted cart data for better email display
-            formDataObj.append('cart-items-formatted', formatCartForEmail());
+            if (cartItemsInput) {
+                cartItemsInput.value = JSON.stringify(state.items);
+            }
             
-            // Submit the form to Netlify
-            const response = await fetch('/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(formDataObj).toString()
+            if (cartItemsFormattedInput) {
+                cartItemsFormattedInput.value = formatCartForEmail();
+            }
+            
+            // Instead of fetch API, rely on the standard form submission
+            // Mark as submitted to prevent double-submission
+            setFormSubmitted(true);
+            
+            // Show success message
+            setSubmitSuccess(true);
+            
+            // Clear cart
+            dispatch({ type: 'CLEAR_CART' });
+            
+            // Reset form
+            setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                message: ''
             });
             
-            if (response.ok) {
-                // Handle success
-                setSubmitSuccess(true);
-                dispatch({ type: 'CLEAR_CART' });
-                
-                // Reset form
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    message: ''
-                });
-                
-                // Auto close after delay
-                setTimeout(() => {
-                    setSubmitSuccess(false);
-                    onClose();
-                }, 3000);
-            } else {
-                // Handle error
-                setSubmitError('Viga tellimuse esitamisel. Palun proovige uuesti.');
-            }
+            // Auto close after delay
+            setTimeout(() => {
+                setSubmitSuccess(false);
+                onClose();
+            }, 3000);
+            
+            // Let the form submit naturally
+            return true;
         } catch (error) {
             console.error('Error submitting form:', error);
             setSubmitError('Viga tellimuse esitamisel. Palun proovige uuesti.');
-        } finally {
             setIsSubmitting(false);
+            return false;
         }
     };
 
@@ -169,12 +178,24 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
                             data-netlify="true"
                             onSubmit={handleNetlifySubmit}
                             className="space-y-4"
+                            action="/thank-you"
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
                             
-                            {/* Hidden field for cart data */}
-                            <input type="hidden" name="cart-items" value={JSON.stringify(state.items)} />
+                            {/* Hidden fields for cart data */}
+                            <input 
+                                type="hidden" 
+                                name="cart-items" 
+                                id="cart-items-input"
+                                value={JSON.stringify(state.items)} 
+                            />
+                            <input 
+                                type="hidden" 
+                                name="cart-items-formatted" 
+                                id="cart-items-formatted-input"
+                                value={formatCartForEmail()} 
+                            />
                             
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -238,7 +259,7 @@ Image URL: ${getImageUrl(item.image) || 'No image'}
                                         ? 'bg-gray-400 cursor-not-allowed' 
                                         : 'bg-[#478f6c] hover:bg-[#3a7459]'
                                 }`}
-                                disabled={isSubmitting}
+                                disabled={isSubmitting || formSubmitted}
                             >
                                 {isSubmitting ? 'Saadame...' : 'Esita tellimus'}
                             </button>
