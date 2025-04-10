@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
-import { useLocation } from 'react-router-dom';
 
 const CartDrawer = ({ isOpen, onClose }) => {
     const { state, dispatch } = useCart();
-    const location = useLocation();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -14,21 +12,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [submitError, setSubmitError] = useState(null);
-
-    // Check if redirected from successful form submission
-    useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        if (params.get('form-success') === 'true') {
-            // Clear cart after successful submission
-            dispatch({ type: 'CLEAR_CART' });
-            // Show success message
-            setSubmitSuccess(true);
-            // Hide success message after delay
-            setTimeout(() => {
-                setSubmitSuccess(false);
-            }, 3000);
-        }
-    }, [location.search, dispatch]);
 
     const handleRemoveItem = (productId) => {
         dispatch({ type: 'REMOVE_FROM_CART', payload: productId });
@@ -51,8 +34,11 @@ const CartDrawer = ({ isOpen, onClose }) => {
         `).join('\n\n');
     };
 
-    const handleSubmit = (e) => {
+    // Simplified submit handler - just to update UI state
+    const handleSubmit = () => {
         setIsSubmitting(true);
+        // Let Netlify handle the actual form submission
+        // The form will redirect to thank-you page after submission
     };
 
     return (
@@ -140,7 +126,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             data-netlify="true"
                             onSubmit={handleSubmit}
                             className="space-y-4"
-                            action="/thank-you?form-success=true"
+                            action="/thank-you"
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
