@@ -43,7 +43,7 @@ const Footer = () => {
           <div>
             <h3 className="text-2xl font-semibold mb-3">Jälgi mind ka</h3>
             <div className="flex justify-center space-x-4 text-5xl">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#478f6c]">
+              <a href="https://www.facebook.com/saaretalustuudio" target="_blank" rel="noopener noreferrer" className="hover:text-[#478f6c]">
                 <FaFacebook />
               </a>
               <a href="https://www.instagram.com/saaretalustuudio/" target="_blank" rel="noopener noreferrer" className="hover:text-[#478f6c]">
