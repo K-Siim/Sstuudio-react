@@ -1,10 +1,4 @@
-<input 
-                                type="hidden" 
-                                name="total-cost" 
-                                value={`Kogusumma: ${state.items.reduce((sum, item) => 
-                                    sum + (typeof item.price === 'number' ? item.price : 0), 0
-                                ).toFixed(2)}€`} 
-                            />import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 
 const CartDrawer = ({ isOpen, onClose }) => {
@@ -48,6 +42,20 @@ const CartDrawer = ({ isOpen, onClose }) => {
         return emailText;
     };
 
+    // Calculate total order cost
+    const calculateTotal = () => {
+        return state.items.reduce((sum, item) => 
+            sum + (typeof item.price === 'number' ? item.price : 0), 0
+        ).toFixed(2);
+    };
+
+    // Create a summary of cart items
+    const getCartSummary = () => {
+        return "Kokkuvõte: " + state.items.map(item => 
+            `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
+        ).join('; ');
+    };
+
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -63,18 +71,8 @@ const CartDrawer = ({ isOpen, onClose }) => {
             
             // Add cart data
             formEntries.append("cart-items-formatted", formatCartForEmail());
-            
-            // Create a summary of cart items for the email
-            const cartSummary = "Kokkuvõte: " + state.items.map(item => 
-                `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
-            ).join('; ');
-            formEntries.append("cart-summary", cartSummary);
-            
-            // Calculate total cost
-            const totalCost = state.items.reduce((sum, item) => 
-                sum + (typeof item.price === 'number' ? item.price : 0), 0
-            ).toFixed(2);
-            formEntries.append("total-cost", `Kogusumma: ${totalCost}€`);
+            formEntries.append("cart-summary", getCartSummary());
+            formEntries.append("total-cost", `Kogusumma: ${calculateTotal()}€`);
 
             // Submit to Netlify
             const response = await fetch("/", {
@@ -115,7 +113,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         <>
             {isOpen && (
                 <div 
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                    className="fixed inset-0 z-40"
                     onClick={onClose}
                 />
             )}
@@ -194,9 +192,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             name="order-form"
                             method="POST" 
                             data-netlify="true"
+                            netlify="true"
                             onSubmit={handleSubmit}
                             className="space-y-4"
-                            netlify
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
@@ -210,9 +208,12 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             <input 
                                 type="hidden" 
                                 name="cart-summary" 
-                                value={"Kokkuvõte: " + state.items.map(item => 
-                                    `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
-                                ).join('; ')} 
+                                value={getCartSummary()} 
+                            />
+                            <input 
+                                type="hidden" 
+                                name="total-cost" 
+                                value={`Kogusumma: ${calculateTotal()}€`} 
                             />
                             
                             <div>
