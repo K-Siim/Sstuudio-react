@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+<input 
+                                type="hidden" 
+                                name="total-cost" 
+                                value={`Kogusumma: ${state.items.reduce((sum, item) => 
+                                    sum + (typeof item.price === 'number' ? item.price : 0), 0
+                                ).toFixed(2)}€`} 
+                            />import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 
 const CartDrawer = ({ isOpen, onClose }) => {
@@ -26,12 +32,20 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
     // Format cart items for email readability
     const formatCartForEmail = () => {
-        return state.items.map(item => `
-            Toode: ${item.title}
-            Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
-            Tootekood: ${item.productCode || 'N/A'}
-            ${getImageUrl(item.image) ? 'Pilt: ' + getImageUrl(item.image) : ''}
-            ----------------------------------------`).join('\n');
+        // Create a single string with all items formatted
+        let emailText = "TELLITUD TOOTED:\n\n";
+        
+        state.items.forEach((item, index) => {
+            emailText += `Toode ${index + 1}: ${item.title}\n`;
+            emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
+            emailText += `Tootekood: ${item.productCode || 'N/A'}\n`;
+            if (getImageUrl(item.image)) {
+                emailText += `Pilt: ${getImageUrl(item.image)}\n`;
+            }
+            emailText += "----------------------------------------\n\n";
+        });
+        
+        return emailText;
     };
 
     // Handle form submission
@@ -51,10 +65,16 @@ const CartDrawer = ({ isOpen, onClose }) => {
             formEntries.append("cart-items-formatted", formatCartForEmail());
             
             // Create a summary of cart items for the email
-            // const cartSummary = state.items.map(item => 
-            //     `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
-            // ).join(', ');
-            // formEntries.append("cart-summary", cartSummary);
+            const cartSummary = "Kokkuvõte: " + state.items.map(item => 
+                `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
+            ).join('; ');
+            formEntries.append("cart-summary", cartSummary);
+            
+            // Calculate total cost
+            const totalCost = state.items.reduce((sum, item) => 
+                sum + (typeof item.price === 'number' ? item.price : 0), 0
+            ).toFixed(2);
+            formEntries.append("total-cost", `Kogusumma: ${totalCost}€`);
 
             // Submit to Netlify
             const response = await fetch("/", {
@@ -190,9 +210,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             <input 
                                 type="hidden" 
                                 name="cart-summary" 
-                                value={state.items.map(item => 
+                                value={"Kokkuvõte: " + state.items.map(item => 
                                     `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
-                                ).join(', ')} 
+                                ).join('; ')} 
                             />
                             
                             <div>
