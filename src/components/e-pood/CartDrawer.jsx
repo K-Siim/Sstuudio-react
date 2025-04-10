@@ -44,16 +44,14 @@ const CartDrawer = ({ isOpen, onClose }) => {
     // Format cart items for email readability
     const formatCartForEmail = () => {
         return state.items.map(item => `
-Product: ${item.title}
-Price: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
-Code: ${item.productCode || 'N/A'}
-Image URL: ${getImageUrl(item.image) || 'No image'}
+            Toode: ${item.title}
+            Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
+            Tootekood: ${item.productCode || 'N/A'}
+            Pilt: ${getImageUrl(item.image) || 'Pole pilti'}
         `).join('\n\n');
     };
 
     const handleSubmit = (e) => {
-        // Let the native HTML form submission handle everything
-        // Just show the user that we're processing
         setIsSubmitting(true);
     };
 
