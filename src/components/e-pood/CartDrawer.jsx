@@ -30,8 +30,8 @@ const CartDrawer = ({ isOpen, onClose }) => {
             Toode: ${item.title}
             Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
             Tootekood: ${item.productCode || 'N/A'}
-            Pilt: ${getImageUrl(item.image) || 'Pole pilti'}
-        `).join('\n\n');
+            ${getImageUrl(item.image) ? 'Pilt: ' + getImageUrl(item.image) : ''}
+            ----------------------------------------`).join('\n');
     };
 
     // Handle form submission
@@ -48,8 +48,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
             formEntries.append("form-name", "order-form");
             
             // Add cart data
-            formEntries.append("cart-items", JSON.stringify(state.items));
             formEntries.append("cart-items-formatted", formatCartForEmail());
+            
+            // Create a summary of cart items for the email
+            // const cartSummary = state.items.map(item => 
+            //     `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
+            // ).join(', ');
+            // formEntries.append("cart-summary", cartSummary);
 
             // Submit to Netlify
             const response = await fetch("/", {
@@ -90,7 +95,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         <>
             {isOpen && (
                 <div 
-                    className="fixed inset-0 z-40"
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
                     onClick={onClose}
                 />
             )}
@@ -179,13 +184,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             {/* Hidden fields for cart data */}
                             <input 
                                 type="hidden" 
-                                name="cart-items" 
-                                value={JSON.stringify(state.items)} 
+                                name="cart-items-formatted" 
+                                value={formatCartForEmail()} 
                             />
                             <input 
                                 type="hidden" 
-                                name="cart-items-formatted" 
-                                value={formatCartForEmail()} 
+                                name="cart-summary" 
+                                value={state.items.map(item => 
+                                    `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
+                                ).join(', ')} 
                             />
                             
                             <div>
