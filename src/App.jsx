@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 import Esileht from './pages/esileht';
 import Ettevõttest from './pages/ettevõttest'
 import Epood from './pages/epood';
-import Nukud from './pages/Nukud';
+import Nukud from './pages/nukud';
 import Töötoad from './pages/töötoad'
 import Kontakt from './pages/kontakt';
 import { CartProvider } from './context/CartContext';
