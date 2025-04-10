@@ -1,13 +1,10 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 
-// Create the context
-const CartContext = createContext();
-
-// Initial state for our cart
+// Algse ostukorvi seisund
 const initialState = {
-    items: [],          // Array to store cart items
-    itemCount: 0,       // Total number of items in cart
-    formData: {         // Customer details form data
+    items: [],          // Toode ostukorvi
+    itemCount: 0,       // Ostukorvis olevate esemete arv
+    formData: {         // Klientide detailide vorm
         name: '',
         email: '',
         phone: '',
@@ -15,57 +12,89 @@ const initialState = {
     }
 };
 
-// Reducer to handle cart actions
+// Loome CartContext
+const CartContext = createContext();
+
+// CartReducer hallitsemiseks
 const cartReducer = (state, action) => {
     switch (action.type) {
-        case 'ADD_TO_CART':
+        case 'ADD_TO_CART': {
+            const existingItem = state.items.find(item => item.id === action.payload.id);
+            if (existingItem) {
+                return state; // Kui toode on juba ostukorvis, siis ära lisa uuesti
+            }
+            const updatedItems = [...state.items, action.payload];
+            sessionStorage.setItem('cartItems', JSON.stringify(updatedItems)); // Salvestame sessionStorage
+
             return {
                 ...state,
-                items: [...state.items, action.payload],
-                itemCount: state.itemCount + 1,
+                items: updatedItems,
+                itemCount: updatedItems.length,
             };
-        case 'REMOVE_FROM_CART':
+        }
+        case 'REMOVE_FROM_CART': {
+            const updatedItems = state.items.filter(item => item.id !== action.payload);
+            
+            console.log("Toode eemaldatud:", action.payload);
+            console.log("Uuendatud ostukorv:", updatedItems);
+
+            // Kui ostukorv on tühi, eemaldame sessionStorage'i
+            if (updatedItems.length === 0) {
+                sessionStorage.removeItem('cartItems');
+            } else {
+                sessionStorage.setItem('cartItems', JSON.stringify(updatedItems)); // Salvestame sessionStorage
+            }
+
             return {
                 ...state,
-                items: state.items.filter(item => item.id !== action.payload),
-                itemCount: state.itemCount - 1,
+                items: updatedItems,
+                itemCount: updatedItems.length,
             };
-        case 'UPDATE_FORM_DATA':
+        }
+        case 'UPDATE_FORM_DATA': {
             return {
                 ...state,
                 formData: { ...state.formData, ...action.payload }
             };
+        }
         default:
             return state;
     }
 };
 
-// Provider component
+// CartProvider, mis pakub konteksti kõigile lastele
 export const CartProvider = ({ children }) => {
-
     const getInitialState = () => {
         try {
-            const savedItems = localStorage.getItem('cartItems');
+            const savedItems = sessionStorage.getItem('cartItems');
             if (savedItems) {
-                const items = JSON.parse(savedItems);
-                return {
-                    ...initialState,
-                    items: items,
-                    itemCount: items.length
-                };
+                const parsedItems = JSON.parse(savedItems);
+                if (parsedItems.length > 0) {
+                    console.log("Ostukorv laetud lehele naastes:", parsedItems);
+                    return {
+                        ...initialState,
+                        items: parsedItems,
+                        itemCount: parsedItems.length
+                    };
+                }
             }
         } catch (error) {
             console.error("Error loading cart:", error);
         }
+        // Kui sessionStorage on tühi, alusta algse väärtusega
         return initialState;
     };
 
     const [state, dispatch] = useReducer(cartReducer, getInitialState());
 
-    
+    // Kontrollime, kas ostukorvi salvestamine toimub ainult siis, kui tooted muutuvad
     useEffect(() => {
-        localStorage.setItem('cartItems', JSON.stringify(state.items));
-    }, [state.items]);
+        // Kui ostukorv on tühi, ei salvestata midagi
+        if (state.items.length > 0) {
+            console.log("Salvestan ostukorvi sessionStorage'i:", state.items);
+            sessionStorage.setItem('cartItems', JSON.stringify(state.items));
+        }
+    }, [state.items]); // Lisa sõltuvus `state.items`, et salvestada ainult siis, kui tooted muutuvad
 
     return (
         <CartContext.Provider value={{ state, dispatch }}>
@@ -74,7 +103,7 @@ export const CartProvider = ({ children }) => {
     );
 };
 
-
+// `useCart` hook, et ligipääseda ostukorvi konteksti
 export const useCart = () => {
     const context = useContext(CartContext);
     if (!context) {
