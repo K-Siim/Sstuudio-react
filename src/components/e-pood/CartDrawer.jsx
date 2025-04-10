@@ -74,10 +74,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     message: ''
                 });
                 
-                // Optionally redirect after a short delay
-                setTimeout(() => {
-                    window.location.href = "/thank-you";
-                }, 1000); // 1 second delay to show success message
+                // No redirect - just stay on the page with the success message
             } else {
                 throw new Error(`Form submission failed: ${response.statusText}`);
             }
@@ -118,7 +115,8 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     {/* Display success message */}
                     {submitSuccess && (
                         <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
-                            Tellimus on edukalt esitatud! Täname teid.
+                            <p className="font-bold text-lg mb-2">Tellimus on edukalt esitatud!</p>
+                            <p>Täname teid tellimuse eest. Võtame teiega peagi ühendust.</p>
                         </div>
                     )}
 
@@ -173,6 +171,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             data-netlify="true"
                             onSubmit={handleSubmit}
                             className="space-y-4"
+                            netlify
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
