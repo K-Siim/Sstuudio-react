@@ -3,7 +3,6 @@ import Theme from '../components/e-pood/Theme';
 import { getCategories, getProducts } from '../services/contentful/api.js';
 import CategoryBar from '../components/e-pood/CategoryBar';
 import ProductGrid from '../components/e-pood/ProductGrid';
-import { CartProvider } from '../context/CartContext';  // CartProvider import
 
 const Epood = () => {
     const [categories, setCategories] = useState([]);
@@ -49,19 +48,17 @@ const Epood = () => {
     );
 
     return (
-        <CartProvider>
-            <div className="min-h-screen bg-gray-50">
-                <Theme />
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <CategoryBar 
-                        categories={categories}
-                        selectedCategory={selectedCategory}
-                        onCategorySelect={setSelectedCategory}
-                    />
-                    <ProductGrid products={filteredProducts} />
-                </div>
+        <div className="min-h-screen bg-gray-50">
+            <Theme />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <CategoryBar 
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    onCategorySelect={setSelectedCategory}
+                />
+                <ProductGrid products={filteredProducts} />
             </div>
-        </CartProvider>
+        </div>
     );
 }
 

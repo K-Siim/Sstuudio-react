@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useCart } from '../../context/CartContext';
 
 const ProductCard = ({ product }) => {
+    const [addedToCart, setAddedToCart] = useState(false);
     const { dispatch } = useCart();
 
     const handleAddToCart = (e) => {
@@ -23,6 +24,10 @@ const ProductCard = ({ product }) => {
                     image: product.images?.[0] || null
                 }
             });
+            
+            // Show feedback that item was added
+            setAddedToCart(true);
+            setTimeout(() => setAddedToCart(false), 2000);
         } catch (error) {
             console.error('Error adding to cart:', error);
         }
@@ -44,10 +49,11 @@ const ProductCard = ({ product }) => {
                 </span>
                 <button 
                     onClick={handleAddToCart}
-                    className="bg-[#478f6c] text-white px-4 py-2 rounded-lg hover:bg-[#3a7459]"
+                    className={`${addedToCart ? 'bg-green-600' : 'bg-[#478f6c]'} text-white px-4 py-2 rounded-lg transition-colors ${addedToCart ? 'hover:bg-green-700' : 'hover:bg-[#3a7459]'}`}
                     aria-label={`Add ${product.title} to cart`}
+                    disabled={addedToCart}
                 >
-                    Lisa korvi
+                    {addedToCart ? 'Lisatud' : 'Lisa korvi'}
                 </button>
             </div>
         </div>
@@ -60,7 +66,7 @@ ProductCard.propTypes = {
         title: PropTypes.string.isRequired,
         price: PropTypes.number.isRequired,
         productCode: PropTypes.string,
-        images: PropTypes.arrayOf(PropTypes.string)
+        images: PropTypes.arrayOf(PropTypes.object)
     }).isRequired
 };
 

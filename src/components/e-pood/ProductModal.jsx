@@ -3,6 +3,7 @@ import { useCart } from '../../context/CartContext';
 
 const ProductModal = ({ product, isOpen, onClose }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [addedToCart, setAddedToCart] = useState(false);
   const { dispatch } = useCart();
 
   if (!isOpen || !product) return null;
@@ -10,15 +11,28 @@ const ProductModal = ({ product, isOpen, onClose }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     
-    const newItem = {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      productCode: product.productCode,
-      image: product.images[0],
-    };
-    
-    dispatch({ type: 'ADD_TO_CART', payload: newItem });
+    try {
+      if (!product?.id || !product?.title || !product?.price) {
+        console.error('Invalid product data');
+        return;
+      }
+      
+      const newItem = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        productCode: product.productCode || '',
+        image: product.images?.[0] || null
+      };
+      
+      dispatch({ type: 'ADD_TO_CART', payload: newItem });
+      
+      // Show feedback that item was added
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 2000);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
   return (
@@ -93,13 +107,14 @@ const ProductModal = ({ product, isOpen, onClose }) => {
             <div className="mt-auto">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-2xl font-bold">
-                  {product.price.toFixed(2)}€
+                  {typeof product.price === 'number' ? product.price.toFixed(2) : '0.00'}€
                 </span>
                 <button 
                   onClick={handleAddToCart}
-                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                  className={`${addedToCart ? 'bg-green-600' : 'bg-blue-600'} text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors`}
+                  disabled={addedToCart}
                 >
-                  Lisa korvi
+                  {addedToCart ? 'Lisatud korvi' : 'Lisa korvi'}
                 </button>
               </div>
             </div>

@@ -35,12 +35,19 @@ const CartDrawer = ({ isOpen, onClose }) => {
         });
     };
 
+    // Helper function to safely get image URL
+    const getImageUrl = (image) => {
+        if (!image) return '';
+        if (typeof image === 'string') return image;
+        return image.url || '';
+    };
+
     return (
         <>
             {/* Modify the backdrop to be more transparent or remove it */}
             {isOpen && (
                 <div 
-                    className="fixed inset-0  bg-opacity-50 z-40"
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
                     onClick={onClose}
                 />
             )}
@@ -71,15 +78,21 @@ const CartDrawer = ({ isOpen, onClose }) => {
                             <div className="space-y-4">
                                 {state.items.map(item => (
                                     <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
-                                        <img 
-                                            src={item.image?.url} 
-                                            alt={item.title} 
-                                            className="w-20 h-20 object-contain"
-                                        />
+                                        {item.image && (
+                                            <img 
+                                                src={getImageUrl(item.image)} 
+                                                alt={item.title} 
+                                                className="w-20 h-20 object-contain"
+                                            />
+                                        )}
                                         <div className="flex-1">
                                             <h3 className="font-medium">{item.title}</h3>
-                                            <p className="text-sm text-gray-500">Kood: {item.productCode}</p>
-                                            <p className="font-bold">{item.price.toFixed(2)}€</p>
+                                            {item.productCode && (
+                                                <p className="text-sm text-gray-500">Kood: {item.productCode}</p>
+                                            )}
+                                            <p className="font-bold">
+                                                {typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
+                                            </p>
                                         </div>
                                         <button 
                                             onClick={() => handleRemoveItem(item.id)}
