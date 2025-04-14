@@ -20,7 +20,7 @@ const Theme = () => {
                 <h2 className="text-3xl font-bold text-gray-900">Kuidas vormistada tellimust?</h2>
                 <p className="text-gray-700 mt-2 text-lg max-w-3xl mx-auto text-center px-4">
                     E-poest tellimine on lihtne. Lisage toode/tooted ostukorvi. Teid suunatakse edasi ostu sooritama.
-                    Seal saate ise valida kuidas saate toode/tooted kätte. Tulete ise järele või saadame teile pakiautomaati.
+                    Seal saate ise valida kuidas saate tooted kätte. Tulete ise järele või saadame teile pakiautomaati.
                 </p>
                 <div className="text-center">
                     <p className="text-gray-700 text-lg mt-12 mb-4">
