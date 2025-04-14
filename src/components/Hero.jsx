@@ -4,7 +4,7 @@ import ProductImage from "../assets/Images/1000006482.jpg";
 const Hero = () => {
     return (
       <div
-        className="relative w-full h-[85vh] flex items-center justify-start bg-cover bg-center px-10"
+        className="relative w-full h-[100vh] flex items-center justify-start bg-cover bg-center px-10"
         style={{
           backgroundImage: `url(${ProductImage})`,
           backgroundPosition: 'center top'
