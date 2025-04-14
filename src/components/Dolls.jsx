@@ -19,9 +19,9 @@ const Dolls = () => {
         
         <div className="lg:w-1/2 text-left leading-relaxed md:leading-loose">
           <p className="text-xl sm:text-2xl md:text-3xl text-black font-light">
-            Käsitöö nukud on ainulaadsed ja täis erilist võlu, valminud suure hoole ja detailitäpsusega.
-            Nende pastelltoonides rõivad ja armsad kaaslased, nagu väikesed kaisuloomad, teevad neist tõelised pilgupüüdjad.
-            Nukud sobivad ideaalselt nii sisekujundusse kui ka südantsoojendavaks kingituseks. 
+            Käsitöö nukud on spetsiaalselt valminud ja täis võlu. Valminud suure hoole ja detailitäpsusega.
+            Nende erilised rõivad ja armsad kaaslased nagu väikesed kaisuloomad, teevad neist tõelised pilgupüüdjad.
+            Nukud on hea kingitus sisekujundusse kui ka heaks kaaslaseks lapsele.
             Iga nukk kannab endas loo ja käsitöölise armastuse.
           </p>
 
