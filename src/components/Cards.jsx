@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import Photo1 from "../assets/Images/1000005904.jpg";
 import Photo2 from "../assets/Images/20250123_194346.jpg";
@@ -45,17 +45,49 @@ const Cards = () => {
   );
 };
 
-
 const Card = ({ img, title, desc }) => {
   const [isActive, setIsActive] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef(null);
+  
   
   const toggleOverlay = () => {
     setIsActive(!isActive);
   };
   
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        
+        if (entry.isIntersecting && entry.intersectionRatio > 0.7) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      },
+      {
+        root: null, 
+        rootMargin: '0px',
+        threshold: 0.7, 
+      }
+    );
+    
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+    
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
+  
   return (
     <div 
-      className="text-white rounded-lg overflow-hidden relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg aspect-[3/4] shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      ref={cardRef}
+      className="text-white rounded-lg overflow-hidden relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg aspect-[3/4] shadow-lg hover:shadow-2xl transition-shadow duration-300 group"
       onClick={toggleOverlay}
     >
       <img
@@ -64,13 +96,12 @@ const Card = ({ img, title, desc }) => {
         loading="lazy"
         className="w-full h-full object-cover rounded-t-lg"
       />
-
       
       <div 
         className={`absolute left-0 top-0 p-4 w-full h-full bg-black/60 backdrop-blur-sm duration-300 
-          ${isActive ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'} 
-          md:group-hover:opacity-100 md:top-0 md:pointer-events-none
-          ${isActive ? 'pointer-events-auto' : 'pointer-events-none md:group-hover:pointer-events-auto'}`}
+          ${isActive || isVisible ? 'opacity-100' : 'opacity-0'} 
+          md:group-hover:opacity-100
+          ${isActive || isVisible ? 'pointer-events-auto' : 'pointer-events-none md:group-hover:pointer-events-auto'}`}
       >
         <div className="space-y-4">
           <Slide cascade>
