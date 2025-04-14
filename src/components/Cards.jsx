@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom"; 
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Photo1 from "../assets/Images/1000005904.jpg";
 import Photo2 from "../assets/Images/20250123_194346.jpg";
 import Photo3 from "../assets/Images/beebitekk.jpg";
@@ -28,41 +28,68 @@ const CardsData = [
 
 const Cards = () => {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 mt-[5rem] md:grid-cols-3 place-items-center gap-6">
         {CardsData.map(({ id, img, title, desc }) => {
           return (
-            <div
+            <Card 
               key={id}
-              className="text-white rounded-lg overflow-hidden relative group w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-[450px] shadow-lg hover:shadow-2xl transition-shadow duration-300"
-            >
-              <img
-                src={img}
-                alt={title}
-                className="w-full h-full object-cover rounded-t-lg"
-              />
-
-              <div className="absolute left-0 top-[-100%] opacity-0 group-hover:opacity-100 group-hover:top-[0] p-4 w-full h-full bg-black/60 group-hover:backdrop-blur-sm duration-500">
-                <div className="space-y-4">
-                  <Slide cascade>
-                    <h1 className="text-2xl sm:text-3xl font-bold">{title}</h1>
-                    <Fade cascade damping={0.05}>
-                      <p className="text-sm sm:text-base">{desc}</p>
-                    </Fade>
-                    <div>
-                      
-                      <Link to="/epood">
-                        <button className="border border-white px-4 py-2 rounded-lg hover:bg-black/20 duration-300">
-                          Vaata
-                        </button>
-                      </Link>
-                    </div>
-                  </Slide>
-                </div>
-              </div>
-            </div>
+              img={img}
+              title={title}
+              desc={desc}
+            />
           );
         })}
+      </div>
+    </div>
+  );
+};
+
+
+const Card = ({ img, title, desc }) => {
+  const [isActive, setIsActive] = useState(false);
+  
+  const toggleOverlay = () => {
+    setIsActive(!isActive);
+  };
+  
+  return (
+    <div 
+      className="text-white rounded-lg overflow-hidden relative w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg aspect-[3/4] shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      onClick={toggleOverlay}
+    >
+      <img
+        src={img}
+        alt={title}
+        loading="lazy"
+        className="w-full h-full object-cover rounded-t-lg"
+      />
+
+      
+      <div 
+        className={`absolute left-0 top-0 p-4 w-full h-full bg-black/60 backdrop-blur-sm duration-300 
+          ${isActive ? 'opacity-100' : 'opacity-0 md:group-hover:opacity-100'} 
+          md:group-hover:opacity-100 md:top-0 md:pointer-events-none
+          ${isActive ? 'pointer-events-auto' : 'pointer-events-none md:group-hover:pointer-events-auto'}`}
+      >
+        <div className="space-y-4">
+          <Slide cascade>
+            <h1 className="text-2xl sm:text-3xl font-bold">{title}</h1>
+            <Fade cascade damping={0.05}>
+              <p className="text-sm sm:text-base">{desc}</p>
+            </Fade>
+            <div>
+              <Link to="/epood">
+                <button 
+                  className="border border-white px-4 py-2 rounded-lg hover:bg-black/20 focus:ring-2 focus:ring-white focus:outline-none duration-300"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Vaata
+                </button>
+              </Link>
+            </div>
+          </Slide>
+        </div>
       </div>
     </div>
   );
