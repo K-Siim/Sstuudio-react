@@ -22,7 +22,7 @@ const CardsData = [
     id: 3,
     img: Photo3,
     title: "Kogege",
-    desc: "Erilised ja ainulaadsed on meie pakutavad tooted pere pisematele. Kõik tooted on valmistatud erilise hoole ja armastusega käsitsi.",
+    desc: "Meie erilised tooted on mõeldud pere pisematele. Kõik tooted on valmistatud hoole ja armastusega käsitsi.",
   },
 ];
 
