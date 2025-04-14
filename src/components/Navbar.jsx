@@ -54,7 +54,7 @@ const Navbar = () => {
           </Link>
 
          
-          <ul className='hidden md:flex space-x-6'>
+          <ul className='hidden lg:flex space-x-6'>
             <li className='p-4'><Link to="/">Esileht</Link></li>
             <li className='p-4'><Link to="/ettevõttest">Ettevõttest</Link></li>
             <li className='p-4'><Link to="/epood">E-pood</Link></li>
@@ -64,7 +64,7 @@ const Navbar = () => {
           </ul>
 
           
-          <div onClick={handleNav} className='block md:hidden cursor-pointer'>
+          <div onClick={handleNav} className='block lg:hidden cursor-pointer'>
             {nav ? <AiOutlineClose size={25} /> : <AiOutlineMenu size={25} />}
           </div>
 
