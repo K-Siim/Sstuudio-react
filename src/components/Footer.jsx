@@ -12,7 +12,7 @@ const Footer = () => {
           
           
           <div>
-            <h3 className="text-2xl font-semibold mb-3">Võtke minuga ühendust</h3>
+            <h3 className="text-2xl font-semibold mb-3">Võta minuga ühendust</h3>
             <p className="text-l">
               <span className="font-semibold">Email:</span> 
               <a href="mailto:saaretiina@gmail.com" className="hover:text-[#478f6c]"> saaretiina@gmail.com</a>
