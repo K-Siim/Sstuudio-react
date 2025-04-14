@@ -10,12 +10,14 @@ import Töötoad from './pages/töötoad'
 import Kontakt from './pages/kontakt';
 import ThankYou from './pages/ThankYou';
 import { CartProvider } from './context/CartContext';
+import ScrollToTop from "./components/ScrollToTop";
 
 
 
 function App() {
   return (
     <CartProvider>
+      <ScrollToTop />
       <div className="app">
         <Navbar />
         <Routes>
