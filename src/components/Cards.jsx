@@ -16,13 +16,13 @@ const CardsData = [
     id: 2,
     img: Photo2,
     title: "Tundke",
-    desc: "Eriline portselanimaal annab Sulle erilise tunde ja Sa saad eristuda kogu maailmast.",
+    desc: "Eriline disain annab Sulle erilise tunde ja Sa saad eristuda kogu maailmast. Meie tahame eristuda ja luua tooteid erilistele inimestele. ",
   },
   {
     id: 3,
     img: Photo3,
     title: "Kogege",
-    desc: "Erilised ja ainulaadsed tooted on valmistatud erilise hoole ja armastusega käsitsi.",
+    desc: "Erilised ja ainulaadsed on meie pakutavad tooted pere pisematele. Köik tooted on valmistatud erilise hoole ja armastusega käsitsi.",
   },
 ];
 
