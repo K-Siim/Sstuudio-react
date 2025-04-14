@@ -16,7 +16,7 @@ const CardsData = [
     id: 2,
     img: Photo2,
     title: "Tundke",
-    desc: "Eriline disain annab Sulle erilise tunde ja Sa saad eristuda kogu maailmast. Meie tahame eristuda ja luua tooteid erilistele inimestele. ",
+    desc: "Eriline disain annab Sulle erilise tunde ja Sa saad eristuda kogu maailmast. Meie tahame eristuda ja luua erilistele inimestele. ",
   },
   {
     id: 3,
