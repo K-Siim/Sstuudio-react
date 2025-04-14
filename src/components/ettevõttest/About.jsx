@@ -18,9 +18,9 @@ const About = () => {
         
         <div className="w-full lg:w-1/2 text-left leading-relaxed md:leading-loose">
           <p className="text-lg sm:text-xl md:text-2xl text-black font-light">
-            S-Stuudio alustas oma tegevust juulis 2019. Lühikese aja jooksul on toodetud palju erinevat tarbekeraamikat ja pere pisematele erinevaid tooteid. 
-            Oleme kogu tootmisprotsessis loodussäästlikud. Kogu toodete valik on valminud Saaremaal käsitööna. 
-            Tooteid on võimalik osta meie kodustuudiost, Instagramist ja Facebookist. Saadame üle Eesti pakiautomaatidesse. 
+            S-Stuudio alustas oma tegevust juulis 2019. Lühikese aja jooksul on toodetud palju erilist tarbekeraamikat ja pere pisematele erinevaid tooteid. 
+            Oleme kogu tootmisprotsessi loodussäästlikud. Kogu toodete valik on valminud Saaremaal käsitööna. 
+            Tooteid on võimalik osta meie kodustuudiost, Instagramist, Facebookist ja E-poest. Saadame üle Eesti pakiautomaatidesse. 
             Ettevõtja on lõpetanud keraamiku eriala Kuressaare Ametikoolis 2018. aastal ja hetkel ennast taas täiendamas samas koolis.
           </p>
         </div>
