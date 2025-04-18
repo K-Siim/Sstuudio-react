@@ -87,7 +87,7 @@ const Workshop = () => {
         <p><strong className="font-semibold">Mudilaste kuu 20.-</strong> Toimub 4 korda kuus 40 minutit.</p>
         <p><strong className="font-semibold">Õpilased kuu 37.-</strong> Toimub 4 korda kuus ja 1,5 tundi üks kord.</p>
         <p><strong className="font-semibold">Täiskasvanud kuu 50.-</strong> Toimub 4 korda kuus, 2 tundi üks kord.</p>
-        <p><strong className="font-semibold">Savitäötuba</strong> üks inimene 15,- tund.</p>
+        <p><strong className="font-semibold">Savitöötuba</strong> üks inimene 15,- tund.</p>
         <p><strong className="font-semibold">Portselani dekoreerimine</strong> üks tass siirdepiltidega 15,- (muud variandid lepitakse kokku vastavalt tootele).</p>
         
         <p className="font-semibold">NB! Kuutasule lisandub savi 1kg 2,-.</p>
