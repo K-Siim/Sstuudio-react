@@ -24,6 +24,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
         return image.url || '';
     };
 
+    // TO-DO
     // Format cart items for email readability
     // const formatCartForEmail = () => {
     //     let emailText = "TELLITUD TOOTED:\n\n";
@@ -42,21 +43,21 @@ const CartDrawer = ({ isOpen, onClose }) => {
     // };
     
     const formatCartForEmail = () => {
-        let emailHtml = `<strong>TELLITUD TOOTED:</strong><br /><br />`;
+        let emailText = "TELLITUD TOOTED:\n\n";
     
         state.items.forEach((item, index) => {
-            emailHtml += `<div style="margin-bottom: 16px;">`;
-            emailHtml += `<strong>Toode ${index + 1}:</strong> ${item.title}<br />`;
-            emailHtml += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€<br />`;
-            emailHtml += `Tootekood: ${item.productCode || 'N/A'}<br />`;
+            emailText += `Toode ${index + 1}: ${item.title}\n`;
+            emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
+            emailText += `Tootekood: ${item.productCode || 'N/A'}\n`;
             if (getImageUrl(item.image)) {
-                emailHtml += `Pilt: <a href="${getImageUrl(item.image)}">${getImageUrl(item.image)}</a><br />`;
+                emailText += `Pilt: ${getImageUrl(item.image)}\n`;
             }
-            emailHtml += `<hr /></div>`;
+            emailText += `----------------------------------------\n\n`;
         });
     
-        return emailHtml;
+        return emailText;
     };
+    
 
     // Calculate total order cost
     const calculateTotal = () => {
@@ -85,10 +86,11 @@ const CartDrawer = ({ isOpen, onClose }) => {
             // Add form-name field for Netlify
             formEntries.append("form-name", "order-form");
             
+            // TO-DO
             // Add cart data
-            formEntries.append("cart-items-formatted", formatCartForEmail());
-            formEntries.append("cart-summary", getCartSummary());
-            formEntries.append("total-cost", `Kogusumma: ${calculateTotal()}€`);
+            // formEntries.append("cart-items-formatted", formatCartForEmail());
+            // formEntries.append("cart-summary", getCartSummary());
+            // formEntries.append("total-cost", `Kogusumma: ${calculateTotal()}€`);
 
             // Submit to Netlify
             const response = await fetch("/", {
