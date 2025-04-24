@@ -43,13 +43,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
     // };
     
     const formatCartForEmail = () => {
-        let emailText = "TELLITUD TOOTED:\n\n\n\n";
+        let emailText = "TELLITUD TOOTED: \n\n\n\n";
     
         state.items.forEach((item, index) => {
-            emailText += `Toode ${index + 1}: ${item.title}\n`;
-            emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
-            emailText += `Tootekood: ${item.productCode || 'N/A'}\n`;
-            emailText += `----------------------------------------\n\n`;
+            emailText += `Toode ${index + 1}: ${item.title} \n`;
+            emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€ \n`;
+            emailText += `Tootekood: ${item.productCode || 'N/A'} \n`;
+            emailText += `---------------------------------------- \n\n`;
         });
     
         return emailText;
@@ -65,9 +65,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
     // Create a summary of cart items
     const getCartSummary = () => {
-        return "Kokkuvõte:\n" + state.items.map(item => 
+        return "Kokkuvõte: \n" + state.items.map(item => 
             `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
-        ).join('\n');
+        ).join(' \n');
     };
 
     // Handle form submission
