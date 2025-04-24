@@ -43,7 +43,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
     // };
     
     const formatCartForEmail = () => {
-        let emailText = "TELLITUD TOOTED:\n\n <br><br>";
+        let emailText = "TELLITUD TOOTED:\n\n\n\n";
     
         state.items.forEach((item, index) => {
             emailText += `Toode ${index + 1}: ${item.title}\n`;
