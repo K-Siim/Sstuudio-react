@@ -25,21 +25,37 @@ const CartDrawer = ({ isOpen, onClose }) => {
     };
 
     // Format cart items for email readability
+    // const formatCartForEmail = () => {
+    //     let emailText = "TELLITUD TOOTED:\n\n";
+        
+    //     state.items.forEach((item, index) => {
+    //         emailText += `Toode ${index + 1}: ${item.title}\n`;
+    //         emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
+    //         emailText += `Tootekood: ${item.productCode || 'N/A'}\n`;
+    //         if (getImageUrl(item.image)) {
+    //             emailText += `Pilt: ${getImageUrl(item.image)}\n`;
+    //         }
+    //         emailText += "----------------------------------------\n\n";
+    //     });
+        
+    //     return emailText;
+    // };
+    
     const formatCartForEmail = () => {
-        // Create a single string with all items formatted
-        let emailText = "TELLITUD TOOTED:\n\n";
-        
+        let emailHtml = `<strong>TELLITUD TOOTED:</strong><br /><br />`;
+    
         state.items.forEach((item, index) => {
-            emailText += `Toode ${index + 1}: ${item.title}\n`;
-            emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
-            emailText += `Tootekood: ${item.productCode || 'N/A'}\n`;
+            emailHtml += `<div style="margin-bottom: 16px;">`;
+            emailHtml += `<strong>Toode ${index + 1}:</strong> ${item.title}<br />`;
+            emailHtml += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€<br />`;
+            emailHtml += `Tootekood: ${item.productCode || 'N/A'}<br />`;
             if (getImageUrl(item.image)) {
-                emailText += `Pilt: ${getImageUrl(item.image)}\n`;
+                emailHtml += `Pilt: <a href="${getImageUrl(item.image)}">${getImageUrl(item.image)}</a><br />`;
             }
-            emailText += "----------------------------------------\n\n";
+            emailHtml += `<hr /></div>`;
         });
-        
-        return emailText;
+    
+        return emailHtml;
     };
 
     // Calculate total order cost

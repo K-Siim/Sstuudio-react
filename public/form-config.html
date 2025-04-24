@@ -1,28 +1,7 @@
-<!-- This file helps Netlify detect your form during build time
+<!-- This file helps Netlify detect your form during build time -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Form Configuration</title>
-</head>
-<body>
-     Hidden form used for Netlify Forms detection
-    <form name="order-form" netlify netlify-honeypot="bot-field" hidden>
-        <input type="text" name="name" />
-        <input type="email" name="email" />
-        <input type="tel" name="phone" />
-        <textarea name="message"></textarea>
-        <input type="hidden" name="cart-summary" />
-        <input type="hidden" name="cart-items-formatted" />
-        <input type="hidden" name="total-cost" />
-    </form>
-</body>
-</html> -->
-
-<!-- This file helps Netlify detect your form during build time -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
     <title>Form Configuration</title>
 </head>
 <body>
@@ -36,41 +15,5 @@
         <input type="hidden" name="cart-items-formatted" />
         <input type="hidden" name="total-cost" />
     </form>
-
-    <script>
-      // Simulated cart data - in your real app, replace this with actual cart data from localStorage, state, etc.
-
-
-      const formatCartItems = (items) => {
-        return "TELLITUD TOOTED:\n\n" + items.map((item, index) =>
-          `Toode ${index + 1}: ${item.name}\n` +
-          `Hind: ${item.price.toFixed(2)}€\n` +
-          `Tootekood: ${item.code}\n` +
-          `Pilt: ${item.image}\n` +
-          `----------------------------------------\n`
-        ).join('\n');
-      };
-
-      const formatCartSummary = (items) => {
-        return `Kokkuvõte: ` + items.map(item =>
-          `${item.name} (${item.code}) - ${item.price.toFixed(2)}€`
-        ).join('; ');
-      };
-
-      const calculateTotal = (items) => {
-        const total = items.reduce((sum, item) => sum + item.price, 0);
-        return `Kogusumma: ${total.toFixed(2)}€`;
-      };
-
-      // Wait until DOM is loaded and then set form values
-      document.addEventListener("DOMContentLoaded", () => {
-        const form = document.forms["order-form"];
-        if (!form) return;
-
-        form.querySelector('input[name="cart-summary"]').value = formatCartSummary(cartItems);
-        form.querySelector('input[name="cart-items-formatted"]').value = formatCartItems(cartItems);
-        form.querySelector('input[name="total-cost"]').value = calculateTotal(cartItems);
-      });
-    </script>
 </body>
 </html>
