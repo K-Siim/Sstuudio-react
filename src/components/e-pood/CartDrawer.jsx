@@ -43,15 +43,12 @@ const CartDrawer = ({ isOpen, onClose }) => {
     // };
     
     const formatCartForEmail = () => {
-        let emailText = "TELLITUD TOOTED:\n\n";
+        let emailText = "TELLITUD TOOTED:\n\n <br><br>";
     
         state.items.forEach((item, index) => {
             emailText += `Toode ${index + 1}: ${item.title}\n`;
             emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
             emailText += `Tootekood: ${item.productCode || 'N/A'}\n`;
-            if (getImageUrl(item.image)) {
-                emailText += `Pilt: ${getImageUrl(item.image)}\n`;
-            }
             emailText += `----------------------------------------\n\n`;
         });
     
@@ -68,9 +65,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
     // Create a summary of cart items
     const getCartSummary = () => {
-        return "Kokkuvõte: " + state.items.map(item => 
+        return "Kokkuvõte:\n" + state.items.map(item => 
             `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
-        ).join('; ');
+        ).join('\n');
     };
 
     // Handle form submission
