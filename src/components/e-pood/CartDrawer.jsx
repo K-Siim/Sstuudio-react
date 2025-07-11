@@ -28,7 +28,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
     // Format cart items for email readability
     // const formatCartForEmail = () => {
     //     let emailText = "TELLITUD TOOTED:\n\n";
-        
+
     //     state.items.forEach((item, index) => {
     //         emailText += `Toode ${index + 1}: ${item.title}\n`;
     //         emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€\n`;
@@ -38,34 +38,34 @@ const CartDrawer = ({ isOpen, onClose }) => {
     //         }
     //         emailText += "----------------------------------------\n\n";
     //     });
-        
+
     //     return emailText;
     // };
-    
+
     const formatCartForEmail = () => {
         let emailText = "TELLITUD TOOTED: \n\n";
-    
+
         state.items.forEach((item, index) => {
             emailText += `Toode ${index + 1}: ${item.title} \n`;
             emailText += `Hind: ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€ \n`;
             emailText += `Tootekood: ${item.productCode || 'N/A'} \n`;
             emailText += `---------------------------------------- \n\n`;
         });
-    
+
         return emailText;
     };
-    
+
 
     // Calculate total order cost
     const calculateTotal = () => {
-        return state.items.reduce((sum, item) => 
+        return state.items.reduce((sum, item) =>
             sum + (typeof item.price === 'number' ? item.price : 0), 0
         ).toFixed(2);
     };
 
     // Create a summary of cart items
     const getCartSummary = () => {
-        return "Kokkuvõte: \n" + state.items.map(item => 
+        return "Kokkuvõte: \n" + state.items.map(item =>
             `${item.title} (${item.productCode || 'N/A'}) - ${typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€`
         ).join(' \n');
     };
@@ -74,15 +74,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
+
         try {
             // Prepare form data
             const form = e.target;
             const formEntries = new FormData(form);
-            
+
             // Add form-name field for Netlify
             formEntries.append("form-name", "order-form");
-            
+
             // TO-DO
             // Add cart data
             // formEntries.append("cart-items-formatted", formatCartForEmail());
@@ -100,10 +100,10 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 // Show success message
                 setSubmitSuccess(true);
                 setSubmitError(null);
-                
+
                 // Clear cart
                 dispatch({ type: 'CLEAR_CART' });
-                
+
                 // Reset form
                 setFormData({
                     name: '',
@@ -111,7 +111,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                     phone: '',
                     message: ''
                 });
-                
+
                 // No redirect - just stay on the page with the success message
             } else {
                 throw new Error(`Form submission failed: ${response.statusText}`);
@@ -127,28 +127,29 @@ const CartDrawer = ({ isOpen, onClose }) => {
     return (
         <>
             {isOpen && (
-                <div 
+                <div
                     className="fixed inset-0 z-40"
                     onClick={onClose}
                 />
             )}
-           
-            <div className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
-                isOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}>
+
+            <div className={`fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}>
                 <div className="p-4 h-full flex flex-col">
-                    
+
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Ostukorv</h2>
-                        <button 
+                        <button
                             onClick={onClose}
                             className="p-2 hover:bg-gray-100 rounded-full"
+                            aria-label="Sulge ostukorv"
                         >
                             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
+
 
                     {/* Display success message */}
                     {submitSuccess && (
@@ -174,9 +175,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 {state.items.map(item => (
                                     <div key={item.id} className="flex items-center gap-4 p-4 border rounded-lg">
                                         {item.image && (
-                                            <img 
-                                                src={getImageUrl(item.image)} 
-                                                alt={item.title} 
+                                            <img
+                                                src={getImageUrl(item.image)}
+                                                alt={item.title}
                                                 className="w-20 h-20 object-contain"
                                             />
                                         )}
@@ -189,9 +190,10 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                                 {typeof item.price === 'number' ? item.price.toFixed(2) : '0.00'}€
                                             </p>
                                         </div>
-                                        <button 
+                                        <button
                                             onClick={() => handleRemoveItem(item.id)}
                                             className="p-2 hover:bg-gray-100 rounded-full"
+                                            aria-label={`Eemalda ${item.name} ostukorvist`}
                                         >
                                             Eemalda
                                         </button>
@@ -203,9 +205,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
                     {/* Contact Form */}
                     {state.items.length > 0 && (
-                        <form 
+                        <form
                             name="order-form"
-                            method="POST" 
+                            method="POST"
                             data-netlify="true"
                             netlify="true"
                             onSubmit={handleSubmit}
@@ -213,24 +215,24 @@ const CartDrawer = ({ isOpen, onClose }) => {
                         >
                             {/* Required for Netlify Forms */}
                             <input type="hidden" name="form-name" value="order-form" />
-                            
+
                             {/* Hidden fields for cart data */}
-                            <input 
-                                type="hidden" 
-                                name="cart-items-formatted" 
-                                value={formatCartForEmail()} 
+                            <input
+                                type="hidden"
+                                name="cart-items-formatted"
+                                value={formatCartForEmail()}
                             />
-                            <input 
-                                type="hidden" 
-                                name="cart-summary" 
-                                value={getCartSummary()} 
+                            <input
+                                type="hidden"
+                                name="cart-summary"
+                                value={getCartSummary()}
                             />
-                            <input 
-                                type="hidden" 
-                                name="total-cost" 
-                                value={`Kogusumma: ${calculateTotal()}€`} 
+                            <input
+                                type="hidden"
+                                name="total-cost"
+                                value={`Kogusumma: ${calculateTotal()}€`}
                             />
-                            
+
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">
                                     Nimi
@@ -240,7 +242,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                     name="name"
                                     required
                                     value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
@@ -254,7 +256,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                     name="email"
                                     required
                                     value={formData.email}
-                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
@@ -268,7 +270,7 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                     name="phone"
                                     required
                                     value={formData.phone}
-                                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
@@ -280,19 +282,18 @@ const CartDrawer = ({ isOpen, onClose }) => {
                                 <textarea
                                     name="message"
                                     value={formData.message}
-                                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                     rows="3"
                                     className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
                                 />
                             </div>
 
-                            <button 
+                            <button
                                 type="submit"
-                                className={`w-full py-3 rounded-lg text-white ${
-                                    isSubmitting 
-                                        ? 'bg-gray-400 cursor-not-allowed' 
-                                        : 'bg-[#478f6c] hover:bg-[#3a7459]'
-                                }`}
+                                className={`w-full py-3 rounded-lg text-white ${isSubmitting
+                                    ? 'bg-gray-400 cursor-not-allowed'
+                                    : 'bg-[#478f6c] hover:bg-[#3a7459]'
+                                    }`}
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? 'Saadame...' : 'Esita tellimus'}

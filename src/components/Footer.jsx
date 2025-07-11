@@ -6,19 +6,19 @@ const Footer = () => {
   return (
     <footer className="bg-[#333] text-white py-10 mt-20">
       <div className="container mx-auto px-6">
-        
-        
+
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          
-          
+
+
           <div>
             <h3 className="text-2xl font-semibold mb-3">Võta minuga ühendust</h3>
             <p className="text-l">
-              <span className="font-semibold">Email:</span> 
+              <span className="font-semibold">Email:</span>
               <a href="mailto:saaretiina@gmail.com" className="hover:text-[#478f6c]"> saaretiina@gmail.com</a>
             </p>
             <p className="text-ll">
-              <span className="font-semibold">Telefon:</span> 
+              <span className="font-semibold">Telefon:</span>
               <a href="tel:+37253484019" className="hover:text-[#478f6c]"> +372 5348 4019</a>
             </p>
             <p className="text-ll">
@@ -26,7 +26,7 @@ const Footer = () => {
             </p>
           </div>
 
-          
+
           <div>
             <h3 className="text-2xl font-semibold mb-3">Lingid</h3>
             <ul className="text-öl space-y-1">
@@ -39,22 +39,36 @@ const Footer = () => {
             </ul>
           </div>
 
-          
+
           <div>
             <h3 className="text-2xl font-semibold mb-3">Jälgi mind ka</h3>
             <div className="flex justify-center space-x-4 text-5xl">
-              <a href="https://www.facebook.com/saaretalustuudio" target="_blank" rel="noopener noreferrer" className="hover:text-[#478f6c]">
+              <a
+                href="https://www.facebook.com/saaretalustuudio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#478f6c]"
+                aria-label="SaareTalu Stuudio Facebook"
+              >
                 <FaFacebook />
               </a>
-              <a href="https://www.instagram.com/saaretalustuudio/" target="_blank" rel="noopener noreferrer" className="hover:text-[#478f6c]">
+
+              <a
+                href="https://www.instagram.com/saaretalustuudio/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#478f6c]"
+                aria-label="SaareTalu Stuudio Instagram"
+              >
                 <FaInstagram />
               </a>
+
             </div>
           </div>
 
         </div>
 
-        
+
         <div className="text-center text-xs text-gray-400 mt-6">
           &copy; 2025 S-Stuudio. All rights reserved.
         </div>
