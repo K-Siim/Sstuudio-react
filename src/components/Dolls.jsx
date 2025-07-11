@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DollImage from "../assets/Images/gandr-collage.jpg"; 
+import DollImage from "../assets/Images/pilt5.jpg"; 
 
 const Dolls = () => {
   return (

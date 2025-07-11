@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductImage from "../../assets/Images/photo-collage.png";
+import ProductImage from "../../assets/Images/pilt6.png.jpg";
 
 
 const ContactForm = () => {

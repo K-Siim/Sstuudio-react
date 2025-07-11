@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import Photo1 from "../assets/Images/1000005904.jpg";
-import Photo2 from "../assets/Images/20250123_194346.jpg";
-import Photo3 from "../assets/Images/beebitekk.jpg";
+import Photo1 from "../assets/Images/pilt2.jpg";
+import Photo2 from "../assets/Images/pilt1.jpg";
+import Photo3 from "../assets/Images/pilt3.jpg";
 import { Slide, Fade } from "react-awesome-reveal";
 
 const CardsData = [

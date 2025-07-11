@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ProductImage from "../../assets/Images/photo-collage.png";
+import ProductImage from "../../assets/Images/pilt6.png.jpg";
 import { motion } from "framer-motion";
 import ImageOne from "../../assets/Images/image-one.webp";
 import ImageTwo from "../../assets/Images/image-two.webp";
